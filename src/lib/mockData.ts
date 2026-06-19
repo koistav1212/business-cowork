@@ -24,53 +24,92 @@ export interface CompanyIntelligence {
 }
 
 export const mockCompanies: Record<string, CompanyIntelligence> = {
+  zoho: {
+    name: "Zoho",
+    website: "zoho.com",
+    industry: "Enterprise SaaS / Business Software",
+    overview: {
+      description: "Zoho Corporation is a leading multinational technology company that specializes in software development, cloud computing, and business tools. Its suite of products handles CRM, recruitment, office tasks, and business operations globally.",
+      hq: "Chennai, India & Austin, TX",
+      size: "15,000+ employees",
+      revenue: "$1.1B ARR (2025 est.)",
+    },
+    funding: {
+      total: "Bootstrapped (Profitable)",
+      lastRound: "Not Applicable",
+      investors: ["Sridhar Vembu (Founder-led)"],
+    },
+    news: [
+      { date: "2026-05-30", title: "Zoho Expands Austin HQ, Targeting US Enterprise Accounts", source: "Austin Business Journal" },
+      { date: "2026-04-12", title: "Zoho Recruit Launches AI Screening Assistant", source: "Zoho Press" },
+    ],
+    leadership: [
+      { name: "Sridhar Vembu", role: "CEO & Co-founder", previous: "Qualcomm" },
+      { name: "Radha Vembu", role: "Product Head", previous: "IIT Madras" },
+    ],
+    techStack: ["Java", "React", "PostgreSQL", "C++", "Apache", "Zoho Creator Engine", "AWS"],
+    hiringSignals: [
+      "Hiring 200+ recruiters and HR ops personnel in Austin and Chennai",
+      "Job postings list 'experience in high-volume developer vetting pipelines'",
+      "Targeting tools to reduce screening latency for remote talent acquisition",
+    ],
+    competitors: [
+      { name: "Workday Recruit", share: "Enterprise Leader", advantage: "Zoho's system has massive pricing advantages, but suffers from legacy developer assessment integrations" },
+      { name: "Greenhouse", share: "Mid-Market Standard", advantage: "TalentIQ provides deeper code-execution analytics and lower latency than traditional APIs" },
+    ],
+    buyingSignals: [
+      "Vembu recently stated focus on expanding global developer pools",
+      "Internal HR complaints on manual review backlogs for overseas applicants",
+    ],
+    recommendedPitch: {
+      angle: "TalentIQ High-Volume Automated Assessment Integration",
+      painPoint: "HR coordinators face 4-week screening latencies for technical engineering recruits, leading to 35% candidate drop-off.",
+      solution: "Deploy TalentIQ assessment APIs inside Zoho Recruit to verify technical abilities in real time and automatically shortlist candidates.",
+    },
+    decisionMakers: [
+      { name: "Gopal Vembu", role: "Head of Global HR Ops", linkedin: "linkedin.com/in/gvembu-hr" },
+      { name: "Deepa Krishnan", role: "CHRO", linkedin: "linkedin.com/in/dkrishnan-chro" },
+    ],
+  },
   stripe: {
     name: "Stripe",
     website: "stripe.com",
     industry: "Fintech / Payment Processing",
     overview: {
       description: "Financial infrastructure for the internet. Millions of businesses—from startups to large enterprises—use Stripe to accept payments, send payouts, and manage their businesses online.",
-      hq: "San Francisco, CA & Dublin, Ireland",
+      hq: "San Francisco, CA",
       size: "8,500+ employees",
       revenue: "$14.3B (2025 est.)",
     },
     funding: {
       total: "$2.4B raised",
       lastRound: "Secondary Market (Valuation: $70B)",
-      investors: ["Sequoia Capital", "Andreessen Horowitz", "Peter Thiel", "Elon Musk"],
+      investors: ["Sequoia Capital", "Andreessen Horowitz", "Peter Thiel"],
     },
     news: [
       { date: "2026-05-12", title: "Stripe Launches Unified AI Billing Platform for SaaS", source: "TechCrunch" },
-      { date: "2026-04-01", title: "Stripe Processes Record $1.2 Trillion in Transaction Volume", source: "Bloomberg" },
     ],
     leadership: [
       { name: "Patrick Collison", role: "CEO & Co-founder", previous: "Auctomatic" },
       { name: "John Collison", role: "President & Co-founder", previous: "Harvard University" },
-      { name: "Dhivya Suryadevara", role: "CFO (Former)", previous: "General Motors" },
     ],
-    techStack: ["Ruby on Rails", "Scala", "Go", "React", "MongoDB", "AWS", "Kafkastream", "LlamaIndex"],
+    techStack: ["Ruby on Rails", "Scala", "Go", "React", "MongoDB", "AWS"],
     hiringSignals: [
-      "Aggressive hiring for AI Integration Engineers within the Stripe Billing team",
-      "Expanding enterprise sales leadership in Europe and APAC",
-      "New job postings for Regulatory Compliance specialists in Latin America",
+      "Hiring for AI Integration Engineers within the Stripe Billing team",
     ],
     competitors: [
-      { name: "Adyen", share: "Strong Europe, unified commerce", advantage: "Stripe's developer ecosystem & startup mindshare is vastly superior" },
-      { name: "PayPal / Braintree", share: "High consumer trust", advantage: "Stripe offers cleaner multi-product api structures and developer APIs" },
+      { name: "Adyen", share: "Strong Europe", advantage: "Stripe has superior developer ecosystem mindshare" },
     ],
     buyingSignals: [
       "Stripe is migrating enterprise billing models to hybrid usage-based schemas",
-      "Recent acquisition of TaxJar suggests focus on automated global compliance upsells",
-      "Expanding support channels for large-scale enterprise merchant migrations",
     ],
     recommendedPitch: {
       angle: "Enterprise Usage-Based Billing Optimization",
-      painPoint: "Enterprise customers struggle to reconcile complex, dynamic usage billing rates with existing ERP integrations.",
-      solution: "Implement an automated billing gateway adapter linked with CRM logs, improving reconciliation speed by 92% and reducing customer churn.",
+      painPoint: "Enterprise customers struggle to reconcile usage billing with existing ERP integrations.",
+      solution: "Implement an automated billing gateway adapter to speed reconciliation.",
     },
     decisionMakers: [
       { name: "Sarah Franklin", role: "Head of Enterprise Sales", linkedin: "linkedin.com/in/sfranklin" },
-      { name: "Liam O'Connor", role: "VP of Developer Relations", linkedin: "linkedin.com/in/loconnor" },
     ],
   },
   vercel: {
@@ -78,171 +117,167 @@ export const mockCompanies: Record<string, CompanyIntelligence> = {
     website: "vercel.com",
     industry: "Cloud Infrastructure / DevTools",
     overview: {
-      description: "Vercel provides the developer experience and infrastructure to build, deploy, and scale the frontend web. Vercel enables developers to host websites that are fast, secure, and dynamically scaled.",
-      hq: "New York, NY (Remote-first)",
+      description: "Vercel provides the developer experience and infrastructure to build, deploy, and scale the frontend web.",
+      hq: "New York, NY",
       size: "950+ employees",
-      revenue: "$180M ARR (2025 est.)",
+      revenue: "$180M ARR",
     },
     funding: {
       total: "$313M raised",
-      lastRound: "Series D ($150M at $2.5B Valuation)",
-      investors: ["TCV", "8VC", "GV", "Accel", "Bedrock"],
+      lastRound: "Series D ($2.5B Valuation)",
+      investors: ["TCV", "GV", "Accel"],
     },
     news: [
       { date: "2026-05-20", title: "Vercel introduces v0 Next-Gen AI interface engine", source: "Vercel Blog" },
-      { date: "2026-03-10", title: "Next.js 16 Released with Native WebMCP Integrations", source: "Vercel Ship" },
     ],
     leadership: [
       { name: "Guillermo Rauch", role: "CEO & Founder", previous: "Socket.io Creator" },
-      { name: "Lee Robinson", role: "VP of Developer Experience", previous: "Hy-Vee" },
     ],
-    techStack: ["Next.js", "React", "Rust (Turbopack)", "AWS (Lambda/CloudFront)", "Vercel Edge Network", "Node.js"],
+    techStack: ["Next.js", "React", "Rust", "AWS", "Node.js"],
     hiringSignals: [
       "Recruiting Solutions Engineers for the Enterprise Web team in EMEA",
-      "Hiring for WebAssembly Core performance engineers",
     ],
     competitors: [
-      { name: "Netlify", share: "Static web & composable arch", advantage: "Vercel has the unfair advantage of owning Next.js development" },
-      { name: "AWS Amplify / Cloudflare Pages", share: "Cheap serverless hosting", advantage: "Vercel provides a significantly better developer experience (DX) and v0 integration" },
+      { name: "Netlify", share: "Mid market host", advantage: "Vercel owns Next.js development" },
     ],
     buyingSignals: [
-      "Enterprise clients complain about rising bandwith egress pricing models",
-      "Vercel is pushing heavily into enterprise security (WAF, SSO, HIPAA compliance)",
+      "Enterprise clients complain about rising bandwidth egress pricing models",
     ],
     recommendedPitch: {
       angle: "Zero-Trust Edge Performance & Egress Mitigation",
-      painPoint: "Enterprise apps face scaling spikes and unexpected bills from heavy serverless function executions and data egress.",
-      solution: "Deploy static-generation fallbacks with incremental site revalidation (ISR) and localized edge caching middleware.",
+      painPoint: "Enterprise apps face scaling spikes and unexpected bills from function executions.",
+      solution: "Deploy static-generation fallbacks with incremental site revalidation.",
     },
     decisionMakers: [
       { name: "Guillermo Rauch", role: "CEO & Founder", linkedin: "linkedin.com/in/rauchg" },
-      { name: "Katy Turner", role: "VP of Enterprise Marketing", linkedin: "linkedin.com/in/kturner" },
-    ],
-  },
-  openai: {
-    name: "OpenAI",
-    website: "openai.com",
-    industry: "Artificial Intelligence",
-    overview: {
-      description: "AI research and deployment company. Our mission is to ensure that artificial general intelligence benefits all of humanity.",
-      hq: "San Francisco, CA",
-      size: "2,000+ employees",
-      revenue: "$4B ARR (2025 est.)",
-    },
-    funding: {
-      total: "$13B+ raised",
-      lastRound: "Strategic investment from Microsoft & Thrive Capital",
-      investors: ["Microsoft", "Thrive Capital", "Khosla Ventures", "Y Combinator"],
-    },
-    news: [
-      { date: "2026-06-05", title: "OpenAI releases GPT-5 Omni with Native Multi-Agent Scheduling", source: "AI Wire" },
-      { date: "2026-04-18", title: "OpenAI Opens Enterprise Office in Tokyo", source: "Nikkei" },
-    ],
-    leadership: [
-      { name: "Sam Altman", role: "CEO & Co-founder", previous: "Y Combinator President" },
-      { name: "Greg Brockman", role: "President & Co-founder", previous: "Stripe CTO" },
-      { name: "Jakub Pachocki", role: "Chief Scientist", previous: "OpenAI Research Director" },
-    ],
-    techStack: ["Python", "PyTorch", "Kubernetes", "Azure Cloud Infrastructure", "Rust", "Triton", "React"],
-    hiringSignals: [
-      "Hiring for Superalignment Safety research engineers",
-      "Expanding high-performance GPU cluster compute engineering teams",
-    ],
-    competitors: [
-      { name: "Anthropic", share: "Strong safety branding", advantage: "OpenAI has the first-mover scale, consumer brand loyalty, and Microsoft backing" },
-      { name: "Google Gemini", share: "Deep search integration", advantage: "OpenAI has standard API ecosystems and developer mindshare" },
-    ],
-    buyingSignals: [
-      "High compute costs force custom model distillation for mobile integrations",
-      "Expanding enterprise data isolation agreements to attract finance clients",
-    ],
-    recommendedPitch: {
-      angle: "On-Premises District Distillation & Routing",
-      painPoint: "High-security financial and healthcare companies are reluctant to send proprietary customer profiles to public endpoints.",
-      solution: "Construct a secure model routing middleware with local token filtering, and deploy distilled model subsets on private cloud VPCs.",
-    },
-    decisionMakers: [
-      { name: "Brad Lightcap", role: "Chief Operating Officer", linkedin: "linkedin.com/in/blightcap" },
-      { name: "Mira Murati", role: "VP of Product Engineering", linkedin: "linkedin.com/in/mmurati" },
-    ],
-  },
-  generic: {
-    name: "Custom Corp",
-    website: "customcorp.io",
-    industry: "Technology Services",
-    overview: {
-      description: "A growing technology services enterprise focusing on digital transformation, cloud integrations, and business automation solutions.",
-      hq: "Boston, MA",
-      size: "250+ employees",
-      revenue: "$45M ARR",
-    },
-    funding: {
-      total: "$15M raised",
-      lastRound: "Series A ($12M)",
-      investors: ["Bessemer Venture Partners", "Local Angels"],
-    },
-    news: [
-      { date: "2026-01-10", title: "Custom Corp Appoints New CTO to Lead Cloud Efforts", source: "BusinessWire" },
-    ],
-    leadership: [
-      { name: "David Chen", role: "CEO & Founder", previous: "Accenture Lead" },
-      { name: "Sarah Jenkins", role: "CTO", previous: "AWS Senior Principal Engineer" },
-    ],
-    techStack: ["TypeScript", "Next.js", "Postgres", "AWS", "Python", "Docker"],
-    hiringSignals: [
-      "Hiring for senior cloud architects and software engineers",
-    ],
-    competitors: [
-      { name: "Global Systems", share: "Large traditional contracts", advantage: "Custom Corp is agile, modern, and implements AI-augmented development cycles" },
-    ],
-    buyingSignals: [
-      "Expanding corporate operations to support remote teams in South America",
-      "Migrating legacy database backends to modern cloud providers",
-    ],
-    recommendedPitch: {
-      angle: "AI-Augmented Cloud Migration Framework",
-      painPoint: "Legacy databases hinder application scaling, but manual migrations are costly and prone to data integrity issues.",
-      solution: "Deploy a script-based migration engine with AI-driven schema conversion validation to slash transition time by 60%.",
-    },
-    decisionMakers: [
-      { name: "David Chen", role: "CEO & Founder", linkedin: "linkedin.com/in/dchen" },
-      { name: "Sarah Jenkins", role: "CTO", linkedin: "linkedin.com/in/sjenkins" },
     ],
   },
 };
 
 export const defaultProposal = {
   title: "Enterprise AI Modernization Proposal",
-  company: "Stripe",
-  executiveSummary: "This proposal outlines the deployment of an AI-driven, usage-based billing optimization engine designed to integrate natively with Stripe's enterprise accounting workflows. By implementing custom data routing layers, Stripe can reduce customer billing reconciliation cycles from 15 days to under 4 hours, directly impacting operational efficiency and customer retention.",
-  problemStatement: "Enterprise merchants utilizing Stripe processing face substantial frictions when reconciling variable, consumption-based pricing metrics with static ERP records. Manual reconciliation causes billing delays, revenue leakage, and increased client support tickets.",
-  opportunity: "Expanding Stripe's core offering with a real-time ledger sync middleware creates a massive sticky upsell channel. This addresses a major operational bottleneck for high-volume enterprise clients who process over $50M annually.",
-  solutionOverview: "We propose constructing a Next-Gen API Billing Adapter. Using lightweight WebMCP schemas, this adapter parses real-time client transaction logs, matches them against active contract billing formulas, and pushes automated invoices straight to QuickBooks and NetSuite.",
-  roi: "Expected ROI: 310% within the first 12 months. Reduces billing administrative costs by $180k/year and captures an estimated $240k in previously leaked billing discrepancies.",
-  implementationPlan: "Phase 1: Architecture design & API schema definitions (Weeks 1-2)\nPhase 2: Core ledger sync engine development & integration sandbox (Weeks 3-6)\nPhase 3: Pilot launch with 3 selected enterprise merchants (Weeks 7-9)\nPhase 4: Global rollout & SLA monitoring setup (Week 10)",
-  pricing: "Implementation & Advisory: $120,000 flat fee.\nSaaS License & Maintenance: $4,500/month (billed annually).",
-  caseStudies: "1. FinTech Hub: Reduced monthly billing exceptions by 94% using the prototype adapter.\n2. SaaSify Corp: Saved 40+ hours per month in finance reconciliation overhead.",
-  nextSteps: "1. Review and sign the letter of intent.\n2. Schedule the technical alignment kickoff session.\n3. Establish sandboxed API permissions.",
+  company: "Zoho",
+  executiveSummary: "This proposal outlines the integration of TalentIQ's automated screening ledger with Zoho Recruit. By embedding high-fidelity coding sandboxes and automated evaluations, Zoho can compress technical screening times from 4 weeks to 4 hours, mitigating drop-off rates and optimizing recruitment costs.",
+  problemStatement: "Zoho's high-volume hiring flows suffer from manual screening bottlenecks, where recruiters review 500+ developer submittals manually. This triggers interview fatigue and delayed assessments.",
+  opportunity: "Deploying automated assessment adapters provides Zoho HR leaders with instant verification data, ensuring only top-tier talent progresses to the final panel rounds.",
+  solutionOverview: "We propose configuring TalentIQ API adapters directly inside Zoho Recruit profiles to send short, localized screening challenges to applicants instantly.",
+  roi: "Expected ROI: 450% within the first 6 months by trimming recruiter review hours and saving $80k in technical vetting overhead.",
+  implementationPlan: "Phase 1: Configure sandbox API integrations (Weeks 1-2)\nPhase 2: Standardize test templates for developer recruits (Weeks 3-4)\nPhase 3: Rollout live to global tech candidates (Week 5)",
+  pricing: "Annual License fee: $24,000 flat.\nSetup & Configuration Advisory: $8,000.",
+  caseStudies: "1. Vercel Systems: Compresed screening duration by 72% for node roles.\n2. Stripe Billing: Saved 80 recruiter hours monthly.",
+  nextSteps: "1. Authorize API sandbox credentials.\n2. Schedule technical rollout kickoff.",
 };
 
 export const defaultSlides = [
-  { id: "1", title: "Executive Overview", content: "Optimizing Stripe's Billing Engine for Enterprise Scale and Real-time Ledger Synchronization." },
-  { id: "2", title: "The Operational Friction", content: "Enterprise client billing reconciliation takes 12-15 days, costing accounting teams hundreds of manual hours and risking invoice errors." },
-  { id: "3", title: "The Solution: Real-Time Sync", content: "A web-based API adapter utilizing event-driven microservices to bind billing cycles directly with ERP ledger systems." },
-  { id: "4", title: "Financial Impact & ROI", content: "Calculated savings of $180k in overhead and 92% compression in reconciliation lag time, delivering 300%+ ROI in Year 1." },
-  { id: "5", title: "Rollout & Next Steps", style: "bg-purple-900/20 border-purple-500/30", content: "Kickoff scheduled for Q3. Sandbox development commences immediately post agreement signature." }
+  { id: "1", title: "Executive Summary", content: "Optimizing tech sourcing pipelines with automated coding evaluation." },
+  { id: "2", title: "The Operational Friction", content: "Vetting latency averages 4 weeks, triggering 35% candidate drop-off rates." },
+  { id: "3", title: "The TalentIQ Solution", content: "Sandboxed browser IDEs that auto-evaluate technical proficiency instantly." },
+  { id: "4", title: "Business Sourcing ROI", content: "Compresses hiring cycle by 90% and saves $80k annually on engineering reviews." },
+  { id: "5", title: "Rollout & Next Steps", style: "bg-purple-900/20 border-purple-500/30", content: "Approve kickoff, integrate Recruit API sandboxes, launch 2-week pilot." }
 ];
+
+// Custom presentation generators based on slide counts
+export function getSlidesForCount(count: number, company: string, goal: string): { id: string; title: string; content: string; style?: string }[] {
+  const compName = company || "Zoho";
+  const goalStr = goal || "Sell TalentIQ Interview Platform";
+
+  if (count <= 3) {
+    return [
+      { id: "1", title: "Executive Proposal Summary", content: `Evaluating ${goalStr} integration inside ${compName}'s global recruitment workforce.` },
+      { id: "2", title: "Proposed Solution & ROI", content: `Embedding automated code-verification sandboxes inside active candidate profiles. Compresses latency by 90% and delivers $80k/year in recruiting hours saved.` },
+      { id: "3", title: "Rollout & Setup Schedule", style: "bg-purple-900/20 border-purple-500/30", content: "Integrate core sandbox APIs. Run 2-week pilot with developer recruits before global production rollout." }
+    ];
+  }
+
+  if (count <= 5) {
+    return [
+      { id: "1", title: "1. Executive Summary", content: `Deploying TalentIQ to optimize ${compName}'s developer vetting and remote acquisition pipelines.` },
+      { id: "2", title: "2. Recruitment Challenges", content: `${compName} faces high screening latencies (averaging 4 weeks) and recruiter fatigue from reviewing hundreds of manual applications.` },
+      { id: "3", title: "3. The TalentIQ Solution", content: "Automated, interactive coding sandboxes embedded natively in applicant profiles that auto-evaluate technical proficiency." },
+      { id: "4", title: "4. Projected Business Impact", content: "Compresses hiring cycle from 28 days to 24 hours. Reduces candidate drop-off by 35% and saves $80k in vetting overhead." },
+      { id: "5", title: "5. Recommended Next Steps", style: "bg-purple-900/20 border-purple-500/30", content: "Authorize sandbox credentials. Conduct pilot testing on engineering pipelines commencing Q3." }
+    ];
+  }
+
+  if (count <= 7) {
+    return [
+      { id: "1", title: "1. Executive Summary", content: `Strategic proposal to deploy TalentIQ's screening matrix inside ${compName}'s recruitment organization.` },
+      { id: "2", title: "2. Target Audience Context", content: `Addresses CHRO concerns surrounding talent sourcing velocities, interview leakage, and high-volume vetting bottlenecks.` },
+      { id: "3", title: "3. Vetting Process Gaps", content: "Manual grading delays engineering hires. Top-tier candidates accept competitor offers before screening cycles conclude." },
+      { id: "4", title: "4. TalentIQ Assessment Platform", content: "Provides sandboxed execution metrics, code efficiency grades, and plagiarism indicators before CVs reach engineers." },
+      { id: "5", title: "5. Integration & API Workflows", content: "Syncs directly with Zoho Recruit database connectors using secure WebMCP adapters. Requires no infrastructure migration." },
+      { id: "6", title: "6. Case Studies & ROI", content: "Reduced time-to-hire by 72% at Vercel. Expected ROI of 410% based on recruiter hour savings." },
+      { id: "7", title: "7. Technical Kickoff Plan", style: "bg-purple-900/20 border-purple-500/30", content: "Finalize compliance reviews. Schedule API alignment session with Zoho engineering leads." }
+    ];
+  }
+
+  // Fallback: 10 slides
+  return [
+    { id: "1", title: "1. Executive Summary", content: `Strategic briefing for introducing TalentIQ's automated technical screening to ${compName}.` },
+    { id: "2", title: "2. Zoho Corporate Overview", content: `Mapping ${compName}'s aggressive hiring growth (200+ active roles) against remote candidate acquisition targets.` },
+    { id: "3", title: "3. Sourcing Industry Trends", content: "Global developer pools are widening, but vetting volumes require automated pre-filtering to prevent engineering bottlenecks." },
+    { id: "4", title: "4. Vetting Challenges", content: "HR coordinators face 4-week screening lag. Sourcing teams spend 20+ hours weekly manually grading basic programming tasks." },
+    { id: "5", title: "5. Sourcing Process Gaps", content: "Manual coding challenges lack execution metrics, resulting in unqualified candidates passing to expensive live rounds." },
+    { id: "6", title: "6. TalentIQ Solution Engine", content: "Combines browser-based IDE sandboxes, automated unit test executors, and coding efficiency metrics." },
+    { id: "7", title: "7. Tech Architecture & Security", content: "Secure containerized code-running environment. Integrates directly with database endpoints using restricted SSL APIs." },
+    { id: "8", title: "8. Expected Financial ROI", content: "Slashes recruitment administration cost by 65%. Year 1 estimated net savings of $120,000 in operational overhead." },
+    { id: "9", title: "9. Case Studies & Validations", content: "Proven success at Stripe and Netlify. Compresses screening review latency from weeks to hours." },
+    { id: "10", title: "10. Rollout Roadmap", style: "bg-purple-900/20 border-purple-500/30", content: "Approve Letter of Intent. Sync sandbox keys. Initialize pilot team launch." }
+  ];
+}
+
+// Custom Email generator based on Goal and Style
+export function getEmailForGoalAndStyle(
+  goal: string,
+  style: string,
+  company: string,
+  pitch: string
+): { subject: string; body: string; followup: string; cta: string } {
+  const comp = company || "Zoho";
+  const p = pitch || "TalentIQ Interview Platform";
+
+  const styleSignatures: Record<string, string> = {
+    Executive: "Sincerely,\nExecutive Office\nTalentIQ Systems",
+    Consultant: "Best regards,\nLead HR Architect\nConsulting Operations",
+    Friendly: "Cheers,\nKoustav Sarkar\nTalentIQ Team",
+    Persuasive: "Cordially,\nKoustav Sarkar\nStrategic Partnerships",
+    "McKinsey Style": "Regards,\nSenior Engagement Director\nTalentIQ",
+    "VC Style": "Best,\nInvestment Operations\nTalentIQ Capital",
+  };
+
+  const sig = styleSignatures[style] || "Best regards,\nKoustav Sarkar";
+
+  if (goal === "Proposal Delivery") {
+    return {
+      subject: `Strategic Proposal: Vetting Automation for ${comp}`,
+      body: `Dear CHRO,\n\nFollowing our review of ${comp}'s hiring goals, I am sharing our formal Proposal detailing how ${p} can optimize candidate qualification.\n\nWe outline a modular API integration designed to reduce screening latencies by 70%. Let's align on next steps.\n\n${sig}`,
+      followup: `Hi there,\n\nJust following up on the screening proposal. I'd love to organize a 15-minute sync with Zoho's recruitment architects to review details.\n\nThanks,\nKoustav`,
+      cta: "Schedule Proposal Review Sync",
+    };
+  }
+
+  if (goal === "Meeting Request") {
+    return {
+      subject: `${comp} Tech Sourcing: Reducing Vetting Lag`,
+      body: `Hi CHRO,\n\nCould we schedule 10 minutes next Tuesday to review how ${p} automates candidate qualifications?\n\nWe recently helped Vercel trim technical vetting latencies down from 3 weeks to under 4 hours, and I'd like to show you similar benchmarks for Zoho.\n\n${sig}`,
+      followup: `Hi,\n\nFollowing up on my note regarding Zoho Recruit vetting. Would you have bandwidth for a brief demo next Wednesday?\n\nBest,\nKoustav`,
+      cta: "Book 10-Minute Demo Slot",
+    };
+  }
+
+  // Default: Cold Outreach
+  return {
+    subject: `Accelerating ${comp} Engineering Recruitment with Vetting Sandboxes`,
+    body: `Dear CHRO,\n\nI noticed ${comp} is actively hiring software teams. With candidate volumes spiking, manual coding reviews introduce massive sourcing backlogs.\n\nBy integrating ${p} assessment engines directly into Zoho Recruit, you can automate technical vettings, saving 15+ recruiter hours weekly.\n\nLet me know if you would like to review the briefs.\n\n${sig}`,
+    followup: `Hi there,\n\nFollowing up on my previous note. We'd love to set up a sandboxed account for Zoho's HR leads to test our developer vetting engine.\n\nBest,\nKoustav`,
+    cta: "Request Demo Account Sandbox",
+  };
+}
 
 export const mockConnectors = [
   { id: "gmail", name: "Gmail", desc: "Sync and trigger client email outreach", logo: "✉️", category: "Communication", status: "Connected", sync: "10 mins ago", permissions: ["Read emails", "Send outreach drafts"] },
-  { id: "hubspot", name: "HubSpot", desc: "Pull account metadata and sync buying signals", logo: "🧡", category: "CRM", status: "Disconnected", sync: "Never", permissions: ["Read contacts", "Update opportunities"] },
-  { id: "slack", name: "Slack", desc: "Stream agent activity alerts to internal channels", logo: "💬", category: "Communication", status: "Connected", sync: "1 min ago", permissions: ["Post messages", "Read public channels"] },
-  { id: "salesforce", name: "Salesforce", desc: "Automate account mapping and lead insertion", logo: "☁️", category: "CRM", status: "Disconnected", sync: "Never", permissions: ["Read/Write accounts", "Manage tasks"] },
   { id: "gdrive", name: "Google Drive", desc: "Export reports, presentations, and spreadsheets", logo: "📁", category: "Storage", status: "Connected", sync: "2 hours ago", permissions: ["Create files", "View directories"] },
   { id: "linkedin", name: "LinkedIn", desc: "Identify company decision makers and hiring signals", logo: "💼", category: "Research", status: "Connected", sync: "1 hour ago", permissions: ["Search profiles", "View company pages"] },
-  { id: "notion", name: "Notion", desc: "Sync generated briefings and internal documentation", logo: "📓", category: "Productivity", status: "Connected", sync: "5 mins ago", permissions: ["Read pages", "Create workspace tables"] },
-  { id: "postgres", name: "Postgres", desc: "Store structured market intelligence profiles", logo: "🐘", category: "Productivity", status: "Connected", sync: "Real-time", permissions: ["Query tables", "Insert rows"] },
-  { id: "apollo", name: "Apollo.io", desc: "Acquire verified executive contact email lists", logo: "🚀", category: "Research", status: "Disconnected", sync: "Never", permissions: ["Enrich emails", "Search positions"] },
 ];
 
 export const mockSkills = [
@@ -256,30 +291,15 @@ export const mockSkills = [
 
 export const agentLogSequence = {
   research: [
-    { step: "Planning", desc: "Analyzing target company: Stripe. Planning information retrieval parameters...", duration: "0.8s", tool: "Agent Brain", logs: "Received request: Stripe (stripe.com), Depth: Deep Intelligence, Target Audience: CEO.\nGenerating task graph...\nTask 1: Search Crunchbase & funding datasets.\nTask 2: Query LinkedIn API for leadership and hiring trends.\nTask 3: Run tech stack scanner on stripe.com.\nTask 4: Pull news articles from past 30 days." },
-    { step: "Tool Selection", desc: "Selecting research scrapers, LinkedIn profile analyzers, and tech stack detectors...", duration: "0.5s", tool: "Tool Registry", logs: "Loading APIs...\nLinkedIn Scraper: ACTIVE\nWappalyzer SDK: ACTIVE\nGoogle Search Custom Engine: ACTIVE\nFinancial API Gateway: ACTIVE" },
-    { step: "Execution", desc: "Querying database, scraping website headers, and resolving executive profiles...", duration: "2.4s", tool: "LinkedIn Scraper", logs: "Scraping stripe.com headers...\nDetected HTTP Headers: Server: cloudflare, Cache-Control: max-age=0.\nRunning reverse DNS...\nFound public endpoints: api.stripe.com, billing.stripe.com.\nResolving leadership profiles: Patrick Collison, John Collison found.\nFound 124 active job listings. High density in 'Enterprise AI billing integration'." },
-    { step: "Verification", desc: "Deduplicating findings, structuring financial entries, and validating key buying signals...", duration: "1.2s", tool: "Agent Validator", logs: "Comparing competitor lists with HubSpot active leads.\nAdyen, PayPal verified as competitors.\nCross-checking funding data against Crunchbase records. Series I/Secondary valuation: $70B.\nData completeness score: 98.4%." },
-    { step: "Artifact Generation", desc: "Compiling information cards and preparing bento board widgets...", duration: "1.1s", tool: "Bento Builder", logs: "Structuring outputs into JSON template...\nCreating cards: Overview, Funding, Recent News, Technology Stack, Hiring, Competitive Analysis, Selling Pitch.\nFormatting markdown text templates..." },
-    { step: "Completion", desc: "Research compiled. Business intelligence workspace updated successfully.", duration: "0.3s", tool: "Agent Brain", logs: "All agent runs completed successfully in 6.3 seconds.\nResult payload sent to client.\nCleaning cache files.\nSystem Idle." }
+    { step: "Researching Company", desc: "Analyzing company structure, funding history, and leadership...", duration: "1.2s", tool: "Wappalyzer API", logs: "Connecting to database records...\nCrawl targets established: zoho.com.\nRetrieved overview parameters: Profitable bootstrapped SaaS.\nScraped founder profiles: Sridhar Vembu." },
+    { step: "Analyzing Hiring Trends", desc: "Identifying hiring volumes and active recruit pipelines...", duration: "1.0s", tool: "LinkedIn Recruiter", logs: "Scanning active job listings for Zoho Corporation...\nDetected 200+ hiring requirements.\nHigh density in technical hiring roles. Bottlenecks found in Austin and Chennai sourcing pools." },
+    { step: "Finding Decision Makers", desc: "Matching target buyer positions and contact details...", duration: "0.8s", tool: "LinkedIn Scraper", logs: "Querying contact matrix for Zoho CHRO...\nFound matching profile: Deepa Krishnan (CHRO).\nFound secondary contact: Gopal Vembu (Global HR Ops).\nRetrieving LinkedIn handles." },
+    { step: "Generating Proposal", desc: "Drafting structural proposal doc & estimating ROI...", duration: "1.6s", tool: "Proposal Writer", logs: "Calculating ROI models for TalentIQ assessments...\nProjected overhead compression: 65%.\nCalculating setup implementation fee: $8,000.\nFormulating executive summaries." },
+    { step: "Creating Presentation", desc: "Structuring widescreen slides based on target requirements...", duration: "1.4s", tool: "PPTX Engine", logs: "Generating slide structures. Mode: 10 slides outline.\nDrawing title: Zoho Tech Sourcing.\nWriting slide nodes...\nDrawing ROI metrics: 450% projected yield." },
+    { step: "Preparing Email Sequence", desc: "Drafting personalized cold outreach and follow-up templates...", duration: "1.1s", tool: "Outreach Compiler", logs: "Compiling template with variables.\nWriting subject line.\nDrafting Cold Outreach, Follow-up, and call-to-actions.\nOptimization score checked: 96/100." },
+    { step: "Syncing Gmail Drafts", desc: "Injecting generated outreach directly to Gmail drafts...", duration: "0.6s", tool: "Gmail API Client", logs: "Connecting to Gmail client...\nPushing drafts to: draft_inbox.\nOAuth token checked: valid.\nDrafts synced successfully. System Idle." }
   ],
-  proposal: [
-    { step: "Planning", desc: "Analyzing company intelligence & drafting proposal structure...", duration: "1.0s", tool: "Agent Brain", logs: "Reading Stripe intelligence profile...\nFormulating Executive Summary, Opportunity mapping, Solution overview, and ROI models." },
-    { step: "Execution", desc: "Generating consulting-grade paragraphs & mapping pricing tiers...", duration: "2.8s", tool: "Proposal Writer", logs: "Generating section 1: Executive Summary...\nGenerating section 2: Problem statement...\nCalculating ROI formulas: 310% based on $180k savings on a $120k budget.\nFormatting PDF structures..." },
-    { step: "Verification", desc: "Validating proposal consistency and run-time spell checks...", duration: "0.9s", tool: "Validation Engine", logs: "Verifying formatting templates.\nWord count: 852. Tone check: Professional / High-Trust Consulting." },
-    { step: "Artifact Generation", desc: "Building proposal PDF and creating file directory link...", duration: "1.5s", tool: "PDF Publisher", logs: "Compiling latex document...\nPDF successfully created at: /artifacts/stripe_proposal_v1.pdf." },
-    { step: "Completion", desc: "Proposal generation complete. Document added to Artifacts folder.", duration: "0.4s", tool: "Agent Brain", logs: "Proposal draft compiled. Ready for download." }
-  ],
-  presentation: [
-    { step: "Planning", desc: "Structuring 5-slide deck based on enterprise ledger integration proposal...", duration: "0.6s", tool: "Agent Brain", logs: "Structuring outline...\nSlide 1: Executive Overview\nSlide 2: Operational Friction\nSlide 3: Real-Time Sync\nSlide 4: Financial Impact\nSlide 5: Rollout Schedule" },
-    { step: "Execution", desc: "Applying visual theme & inserting slide content templates...", duration: "1.9s", tool: "PPTX Builder", logs: "Drawing custom slides in memory...\nApplying custom layouts, typography styling, and bullet offsets.\nAdding modern purple accent highlight colors." },
-    { step: "Artifact Generation", desc: "Compiling PowerPoint presentation file...", duration: "1.2s", tool: "PPTX Exporter", logs: "Writing PPTX zip stream...\nFile successfully exported to: /artifacts/stripe_presentation.pptx" },
-    { step: "Completion", desc: "PowerPoint presentation generated successfully.", duration: "0.2s", tool: "Agent Brain", logs: "Slides ready." }
-  ],
-  email: [
-    { step: "Planning", desc: "Analyzing recipient list and selecting best personalizations...", duration: "0.5s", tool: "Agent Brain", logs: "Loading recipient target: Sarah Franklin (Salesforce & Stripe metadata).\nSubject line optimization check..." },
-    { step: "Execution", desc: "Drafting email outreach & scoring spam indicators...", duration: "1.2s", tool: "Email Compiler", logs: "Drafting message using personalization tokens...\nRunning spam filters (checking for triggers like 'free', 'guaranteed', excessive caps).\nSpam index score: 0.12 (Very Low).\nReadability score: Grade 8 (Optimal)." },
-    { step: "Verification", desc: "Verifying Gmail API connection credentials...", duration: "0.8s", tool: "Gmail Connector", logs: "Checking OAuth token validity. Token is valid.\nSender account: executive@copilot.io." },
-    { step: "Completion", desc: "Email outreach generated and synced with Gmail drafts.", duration: "0.3s", tool: "Agent Brain", logs: "Outreach scheduled as draft." }
-  ]
+  proposal: [],
+  presentation: [],
+  email: []
 };

@@ -24,12 +24,14 @@ interface ResearchTabProps {
   companyData: CompanyIntelligence | null;
   onGenerate: (inputs: { name: string; website: string; industry: string; depth: string; audience: string; format: string }) => void;
   isRunning: boolean;
+  hideForm?: boolean;
 }
 
 export default function ResearchTab({
   companyData,
   onGenerate,
   isRunning,
+  hideForm = false,
 }: ResearchTabProps) {
   const [form, setForm] = useState({
     name: "",
@@ -55,7 +57,8 @@ export default function ResearchTab({
   return (
     <div className="space-y-8 p-6">
       {/* Parameters Input Form Card */}
-      <SpotlightCard className="p-6 border border-zinc-900 bg-zinc-950/40 rounded-xl relative overflow-hidden select-none">
+      {!hideForm && (
+        <SpotlightCard className="p-6 border border-zinc-900 bg-zinc-950/40 rounded-xl relative overflow-hidden select-none">
         <div className="absolute top-0 right-0 w-32 h-32 bg-violet-600/5 rounded-full blur-[48px] pointer-events-none" />
         <h2 className="text-sm font-semibold text-zinc-200 flex items-center gap-2 mb-4">
           <Search size={15} className="text-violet-400" />
@@ -210,6 +213,7 @@ export default function ResearchTab({
           </div>
         </form>
       </SpotlightCard>
+      )}
 
       {/* Results Bento Grid */}
       {companyData ? (

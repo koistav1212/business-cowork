@@ -5,14 +5,9 @@ import Sidebar from "@/components/Sidebar";
 import CommandBar from "@/components/CommandBar";
 import CommandPalette from "@/components/CommandPalette";
 import MainHero from "@/components/MainHero";
-import ResearchTab from "@/components/ResearchTab";
-import ProposalBuilder from "@/components/ProposalBuilder";
-import PresentationBuilder from "@/components/PresentationBuilder";
-import EmailCampaign from "@/components/EmailCampaign";
-import ExecutionMonitor, { TimelineStep } from "@/components/ExecutionMonitor";
+import BusinessWorkspace from "@/components/BusinessWorkspace";
 import ConnectorsPage from "@/components/ConnectorsPage";
 import SkillsPage from "@/components/SkillsPage";
-import ArtifactsPage, { ArtifactItem } from "@/components/ArtifactsPage";
 import RightActivityPanel from "@/components/RightActivityPanel";
 import {
   mockCompanies,
@@ -22,15 +17,8 @@ import {
 } from "@/lib/mockData";
 import {
   Sparkles,
-  Server,
-  Zap,
-  CheckCircle2,
   Lock,
-  Database,
-  Brain,
   Sliders,
-  Play,
-  Terminal,
 } from "lucide-react";
 import { SpotlightCard } from "@/components/SpotlightCard";
 
@@ -53,19 +41,10 @@ export default function Home() {
   // Active Company Research Data
   const [companyData, setCompanyData] = useState<CompanyIntelligence | null>(null);
 
-  // Artifacts Page Database
-  const [artifacts, setArtifacts] = useState<ArtifactItem[]>([
-    {
-      id: "art-1",
-      name: "Stripe_Diligence_Overview.pdf",
-      type: "PDF",
-      size: "1.4 MB",
-      version: "v1.1",
-      createdBy: "Copilot Agent",
-      execId: "exec_19f3a",
-      summary: "Baseline overview mapping funding tiers, leadership listings, and hiring metrics for Stripe. Compiled during system initialization.",
-    },
-  ]);
+  // Active Sourcing Goal Parameters
+  const [slidesCount, setSlidesCount] = useState(10);
+  const [writingStyle, setWritingStyle] = useState("Executive");
+  const [sourcingGoal, setSourcingGoal] = useState("Sell TalentIQ Interview Platform");
 
   // Agent Simulator States
   const [agentStatus, setAgentStatus] = useState<"idle" | "running" | "completed">("idle");
@@ -76,15 +55,6 @@ export default function Home() {
     memory: {} as Record<string, string>,
     verification: "",
   });
-
-  // Timeline Progress State
-  const [timeline, setTimeline] = useState<TimelineStep[]>(
-    agentLogSequence.research.map((item) => ({
-      ...item,
-      status: "pending" as const,
-    }))
-  );
-  const [activeStepIndex, setActiveStepIndex] = useState(0);
 
   // Command Palette listener for Cmd+K
   useEffect(() => {
@@ -107,17 +77,10 @@ export default function Home() {
 
     setAgentStatus("running");
     setAgentLogs([]);
-    setActiveStepIndex(0);
 
-    const steps = agentLogSequence[type];
-    setTimeline(
-      steps.map((item) => ({
-        ...item,
-        status: "pending" as const,
-      }))
-    );
-
+    const steps = agentLogSequence.research;
     let stepIndex = 0;
+    
     const runNextStep = () => {
       if (stepIndex >= steps.length) {
         setAgentStatus("completed");
@@ -132,21 +95,20 @@ export default function Home() {
       }
 
       const stepDetails = steps[stepIndex];
-      setActiveStepIndex(stepIndex);
       setAgentState((prev) => {
         const updatedMemory = { ...prev.memory };
-        if (type === "research" && stepIndex === 0) {
-          updatedMemory["target"] = "Stripe";
-          updatedMemory["depth"] = "Deep Intelligence";
-        } else if (type === "research" && stepIndex === 2) {
-          updatedMemory["valuation"] = "$70 Billion";
-          updatedMemory["hq"] = "San Francisco, CA";
+        if (stepIndex === 0) {
+          updatedMemory["target"] = companyData?.name || "Zoho";
+          updatedMemory["goal"] = sourcingGoal;
+        } else if (stepIndex === 2) {
+          updatedMemory["target_buyer"] = "Deepa Krishnan (CHRO)";
+          updatedMemory["signals"] = "200+ active roles";
         }
         return {
           ...prev,
           stage: stepDetails.step,
           activeTool: stepDetails.tool,
-          verification: stepIndex >= 3 ? "Verified" : "Verifying",
+          verification: stepIndex >= 4 ? "Verified" : "Verifying",
           memory: updatedMemory,
         };
       });
@@ -162,9 +124,9 @@ export default function Home() {
             .padStart(2, "0")}:${now.getSeconds().toString().padStart(2, "0")}`;
 
           let type: "info" | "success" | "warning" = "info";
-          if (lineText.includes("Success") || lineText.includes("ACTIVE") || lineText.includes("verified")) {
+          if (lineText.includes("Success") || lineText.includes("ACTIVE") || lineText.includes("synced")) {
             type = "success";
-          } else if (lineText.includes("Warning") || lineText.includes("Acquiring")) {
+          } else if (lineText.includes("Warning") || lineText.includes("Scanning") || lineText.includes("Connecting")) {
             type = "warning";
           }
 
@@ -172,83 +134,46 @@ export default function Home() {
             ...prev,
             { text: lineText, type, time: timeStr },
           ]);
-        }, lineIdx * 120);
+        }, lineIdx * 100);
       });
 
       // Schedule next step transition
       setTimeout(() => {
         stepIndex++;
         runNextStep();
-      }, stepLogLines.length * 120 + 750);
+      }, stepLogLines.length * 100 + 600);
     };
 
     runNextStep();
   };
 
   // Triggers
-  const handleExecuteResearch = (inputs: { name: string; website: string; industry: string }) => {
-    const presetKey = inputs.name.toLowerCase();
-    const resolvedCompany = mockCompanies[presetKey] || {
-      ...mockCompanies.generic,
-      name: inputs.name,
-      website: inputs.website || `${presetKey}.com`,
-      industry: inputs.industry,
+  const handleGeneratePackage = (form: {
+    company: string;
+    goal: string;
+    audience: string;
+    outputs: { ppt: boolean; pdf: boolean; email: boolean };
+    depth: string;
+    style: string;
+    slides: number;
+  }) => {
+    setSlidesCount(form.slides);
+    setWritingStyle(form.style);
+    setSourcingGoal(form.goal);
+
+    const compKey = form.company.toLowerCase();
+    const resolvedCompany = mockCompanies[compKey] || {
+      ...mockCompanies.zoho,
+      name: form.company,
+      website: `${compKey}.com`,
+      industry: "Enterprise Tech",
     };
 
-    setActiveTab("research");
+    setCompanyData(resolvedCompany);
+    setActiveTab("workspace");
 
     runAgentTask("research", () => {
-      setCompanyData(resolvedCompany);
-      // Append a new PDF summary report to artifacts page
-      const newReport: ArtifactItem = {
-        id: `art-${Date.now()}`,
-        name: `${resolvedCompany.name}_Intelligence_Dossier.pdf`,
-        type: "PDF",
-        size: "2.1 MB",
-        version: "v1.0",
-        createdBy: "Copilot Agent",
-        execId: `exec_${Math.random().toString(36).substring(2, 7)}`,
-        summary: `Comprehensive digital footprint mapping for ${resolvedCompany.name}. Features tech stack dependencies, structural hiring indicators, and strategic pitch models.`,
-      };
-      setArtifacts((prev) => [newReport, ...prev]);
-    });
-  };
-
-  const handleGenerateProposal = (proposalTitle: string) => {
-    runAgentTask("proposal", () => {
-      const newProposal: ArtifactItem = {
-        id: `art-${Date.now()}`,
-        name: `${proposalTitle.replace(/\s+/g, "_")}.pdf`,
-        type: "PDF",
-        size: "820 KB",
-        version: "v1.0",
-        createdBy: "Copilot Agent",
-        execId: `exec_${Math.random().toString(36).substring(2, 7)}`,
-        summary: `Completed enterprise proposal outline compiling Executive Summary, Expected ROI breakdown, and pricing models for client signature.`,
-      };
-      setArtifacts((prev) => [newProposal, ...prev]);
-    });
-  };
-
-  const handleGeneratePPT = () => {
-    runAgentTask("presentation", () => {
-      const newPPT: ArtifactItem = {
-        id: `art-${Date.now()}`,
-        name: `Stripe_Strategy_Briefing.pptx`,
-        type: "PPTX",
-        size: "3.4 MB",
-        version: "v1.0",
-        createdBy: "Copilot Agent",
-        execId: `exec_${Math.random().toString(36).substring(2, 7)}`,
-        summary: `Consulting-grade slides layout mapping financial reconciliation ROI metrics, ledger synchronizations, and execution schedules.`,
-      };
-      setArtifacts((prev) => [newPPT, ...prev]);
-    });
-  };
-
-  const handleSendEmail = (subject: string) => {
-    runAgentTask("email", () => {
-      alert(`Email sent successfully: "${subject}"`);
+      // Done simulating
     });
   };
 
@@ -271,25 +196,21 @@ export default function Home() {
   const handleSelectCommand = (cmdId: string) => {
     if (cmdId.startsWith("run_research_")) {
       const comp = cmdId.replace("run_research_", "");
-      handleExecuteResearch({ name: comp.toUpperCase(), website: `${comp}.com`, industry: "Technology" });
-    } else if (cmdId === "switch_proposals") {
-      setActiveTab("proposals");
-    } else if (cmdId === "switch_presentations") {
-      setActiveTab("presentations");
-    } else if (cmdId === "switch_email") {
-      setActiveTab("email");
-    } else if (cmdId === "sync_hubspot") {
-      handleToggleConnect("hubspot");
+      handleGeneratePackage({
+        company: comp.toUpperCase(),
+        goal: "Strategic sales modernization",
+        audience: "CHRO",
+        outputs: { ppt: true, pdf: true, email: true },
+        depth: "Deep Intelligence",
+        style: "McKinsey Style",
+        slides: 10,
+      });
+    } else if (cmdId === "switch_proposals" || cmdId === "switch_presentations" || cmdId === "switch_email") {
+      setActiveTab("workspace");
+    } else if (cmdId === "sync_hubspot" || cmdId === "sync_salesforce") {
       setActiveTab("connectors");
-    } else if (cmdId === "sync_salesforce") {
-      handleToggleConnect("salesforce");
-      setActiveTab("connectors");
-    } else if (cmdId === "run_skill_research") {
+    } else if (cmdId === "run_skill_research" || cmdId === "run_skill_brief") {
       setActiveTab("skills");
-      runAgentTask("research", () => {});
-    } else if (cmdId === "run_skill_brief") {
-      setActiveTab("skills");
-      runAgentTask("proposal", () => {});
     }
   };
 
@@ -312,45 +233,35 @@ export default function Home() {
           agentStatus={agentStatus}
           connectedCount={connectedCount}
           totalCount={connectors.length}
-          onQuickAction={() => handleExecuteResearch({ name: "Stripe", website: "stripe.com", industry: "Fintech" })}
+          onQuickAction={() => handleGeneratePackage({
+            company: "Zoho",
+            goal: "Sell TalentIQ Interview Platform",
+            audience: "CHRO",
+            outputs: { ppt: true, pdf: true, email: true },
+            depth: "Deep Intelligence",
+            style: "Executive",
+            slides: 10,
+          })}
         />
 
         {/* Tab Router Switch */}
         <main className="flex-1 overflow-y-auto">
           {activeTab === "dashboard" && (
             <MainHero
-              onStartReport={() => setActiveTab("research")}
-              onViewExecutions={() => setActiveTab("executions")}
-              onQuickSelect={(company) =>
-                handleExecuteResearch({ name: company, website: `${company}.com`, industry: "Technology" })
-              }
+              onGeneratePackage={handleGeneratePackage}
+              isRunning={agentStatus === "running"}
             />
           )}
 
-          {activeTab === "research" && (
-            <ResearchTab
+          {activeTab === "workspace" && (
+            <BusinessWorkspace
               companyData={companyData}
-              onGenerate={handleExecuteResearch}
               isRunning={agentStatus === "running"}
+              onRunAction={(type, callback) => runAgentTask(type, callback)}
+              slidesCount={slidesCount}
+              writingStyle={writingStyle}
+              sourcingGoal={sourcingGoal}
             />
-          )}
-
-          {activeTab === "proposals" && (
-            <ProposalBuilder
-              onGenerateProposal={handleGenerateProposal}
-              isRunning={agentStatus === "running"}
-            />
-          )}
-
-          {activeTab === "presentations" && (
-            <PresentationBuilder
-              onGeneratePPT={handleGeneratePPT}
-              isRunning={agentStatus === "running"}
-            />
-          )}
-
-          {activeTab === "email" && (
-            <EmailCampaign onSendEmail={handleSendEmail} isRunning={agentStatus === "running"} />
           )}
 
           {activeTab === "connectors" && (
@@ -367,69 +278,6 @@ export default function Home() {
               }
               isRunning={agentStatus === "running"}
             />
-          )}
-
-          {activeTab === "documents" && <ArtifactsPage artifactsList={artifacts} />}
-
-          {activeTab === "executions" && (
-            <ExecutionMonitor
-              timeline={timeline}
-              activeStepIndex={activeStepIndex}
-              isRunning={agentStatus === "running"}
-            />
-          )}
-
-          {activeTab === "memory" && (
-            <div className="p-6 space-y-6 select-none max-w-3xl mx-auto">
-              <div className="border-b border-zinc-900 pb-4">
-                <h2 className="text-base font-semibold text-zinc-200 flex items-center gap-2">
-                  <Brain size={16} className="text-violet-400" />
-                  <span>Agent Memory Database</span>
-                </h2>
-                <p className="text-3xs text-zinc-500 font-mono mt-0.5">
-                  Long-term metadata stored by the agent across executions.
-                </p>
-              </div>
-
-              <SpotlightCard className="p-6 border border-zinc-900 bg-zinc-950/40">
-                <div className="flex items-center gap-3 border-b border-zinc-900/60 pb-4 mb-4">
-                  <Sliders size={15} className="text-violet-400" />
-                  <h3 className="text-xs font-bold text-zinc-200">Configure Memory Rules</h3>
-                </div>
-
-                <div className="grid grid-cols-2 gap-4 text-3xs font-semibold text-zinc-400 mb-6">
-                  <div className="bg-zinc-900/30 p-3 rounded-lg border border-zinc-900">
-                    <span className="block text-zinc-500 uppercase">Memory Retention</span>
-                    <span className="block text-zinc-300 font-medium mt-1">Unlimited (Persistent)</span>
-                  </div>
-                  <div className="bg-zinc-900/30 p-3 rounded-lg border border-zinc-900">
-                    <span className="block text-zinc-500 uppercase">Context Isolation</span>
-                    <span className="block text-zinc-300 font-medium mt-1">Isolate by Workspace Profile</span>
-                  </div>
-                </div>
-
-                <div className="space-y-3">
-                  <span className="text-3xs text-zinc-500 font-bold uppercase block">Memory Entries Cached</span>
-                  {Object.keys(agentState.memory).length === 0 ? (
-                    <p className="text-xs text-zinc-500 italic py-2">
-                      No active memory keys cached. Run an intelligence report first.
-                    </p>
-                  ) : (
-                    <div className="space-y-2">
-                      {Object.entries(agentState.memory).map(([key, val]) => (
-                        <div
-                          key={key}
-                          className="flex items-center justify-between p-2.5 rounded-lg bg-zinc-900/50 border border-zinc-850"
-                        >
-                          <span className="font-mono text-violet-400 text-3xs">{key}</span>
-                          <span className="text-zinc-300 text-xs font-medium">{val}</span>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              </SpotlightCard>
-            </div>
           )}
 
           {activeTab === "settings" && (

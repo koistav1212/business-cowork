@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
-import { Cpu, Terminal, Database, ShieldCheck, Play, Square } from "lucide-react";
+import React, { useState, useEffect, useRef } from "react";
+import { Cpu, Terminal, CheckCircle2, Circle, Activity, Square, ChevronDown, ChevronUp } from "lucide-react";
 
 interface LogLine {
   text: string;
@@ -27,148 +27,170 @@ export default function RightActivityPanel({
   isRunning,
   onStopAgent,
 }: RightActivityPanelProps) {
+  const [showDevLogs, setShowDevLogs] = useState(false);
   const logEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    logEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [logs]);
+    if (showDevLogs) {
+      logEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [logs, showDevLogs]);
+
+  // High-level business milestones mapping
+  const milestones = [
+    { key: "Researching Company", label: "Researching Target Company" },
+    { key: "Analyzing Hiring Trends", label: "Analyzing Hiring Sourcing Trends" },
+    { key: "Finding Decision Makers", label: "Finding Sourcing Decision Makers" },
+    { key: "Generating Proposal", label: "Generating Strategic Proposal" },
+    { key: "Creating Presentation", label: "Creating Widescreen Slides" },
+    { key: "Preparing Email Sequence", label: "Preparing Email Campaign Draft" },
+    { key: "Syncing Gmail Drafts", label: "Synching Outlook & Gmail Drafts" },
+  ];
+
+  // Helper to determine status of a milestone
+  const getMilestoneStatus = (milestoneKey: string) => {
+    const currentIndex = milestones.findIndex((m) => m.key === agentState.stage);
+    const targetIndex = milestones.findIndex((m) => m.key === milestoneKey);
+
+    if (!isRunning) {
+      if (agentState.stage === "Success") return "completed";
+      if (agentState.stage === "Cancelled") return "cancelled";
+      return "pending";
+    }
+
+    if (currentIndex > targetIndex) return "completed";
+    if (currentIndex === targetIndex) return "running";
+    return "pending";
+  };
 
   return (
-    <aside className="w-80 border-l border-zinc-900 bg-zinc-950 flex flex-col h-full overflow-hidden">
-      {/* Panel Header */}
+    <aside className="w-80 border-l border-zinc-900 bg-zinc-950 flex flex-col h-full overflow-hidden select-none flex-shrink-0">
+      {/* Header Panel */}
       <div className="h-16 px-4 border-b border-zinc-900 flex items-center justify-between bg-zinc-950/50 backdrop-blur-md flex-shrink-0">
         <div className="flex items-center gap-2">
-          <div className="w-2 h-2 rounded-full bg-violet-500 animate-ping" />
+          {isRunning ? (
+            <div className="w-2 h-2 rounded-full bg-violet-500 animate-ping" />
+          ) : (
+            <div className="w-2 h-2 rounded-full bg-zinc-600" />
+          )}
           <span className="text-xs font-semibold uppercase tracking-wider text-zinc-300">
-            Agent Monitor
+            Agent Actions
           </span>
         </div>
         {isRunning && (
           <button
             onClick={onStopAgent}
-            className="flex items-center gap-1.5 px-2 py-1.5 rounded-md bg-red-950/20 border border-red-500/20 text-3xs font-semibold text-red-400 hover:bg-red-900/30 hover:border-red-500/40 active:scale-95 transition-all"
+            className="flex items-center gap-1 px-2 py-1 rounded bg-red-950/30 border border-red-500/20 text-4xs font-bold text-red-400 hover:bg-red-900/30 hover:border-red-500/40 transition-colors"
           >
-            <Square size={10} fill="currentColor" />
-            <span>Stop Agent</span>
+            <Square size={8} fill="currentColor" />
+            <span>Cancel Run</span>
           </button>
         )}
       </div>
 
-      {/* Plan & Stage Metrics */}
-      <div className="p-4 border-b border-zinc-900 space-y-4 bg-zinc-950/20 flex-shrink-0">
-        {/* Active Stage */}
-        <div className="space-y-1">
-          <div className="flex items-center justify-between text-3xs text-zinc-500 font-semibold uppercase">
-            <span>Execution Stage</span>
-            <Cpu size={12} className="text-violet-400 animate-spin" />
-          </div>
-          <div className="px-3 py-2 rounded-lg bg-zinc-900/40 border border-zinc-900/60 text-xs font-semibold text-zinc-200 truncate">
-            {agentState.stage || "No Active Process"}
-          </div>
+      {/* Business-friendly milestones list */}
+      <div className="flex-1 overflow-y-auto p-5 space-y-4">
+        <div className="space-y-1 pb-1">
+          <h3 className="text-3xs font-semibold uppercase tracking-wider text-zinc-500">
+            Workspace Build Pipeline
+          </h3>
+          <p className="text-4xs text-zinc-650">
+            Current Stage: {isRunning ? agentState.stage : agentState.stage === "Success" ? "Success" : "Idle"}
+          </p>
         </div>
 
-        {/* Active Tool */}
-        <div className="space-y-1">
-          <div className="flex items-center justify-between text-3xs text-zinc-500 font-semibold uppercase">
-            <span>Active Tool</span>
-            <Terminal size={12} className="text-indigo-400" />
-          </div>
-          <div className="px-3 py-2 rounded-lg bg-zinc-900/40 border border-zinc-900/60 text-xs font-mono text-zinc-300 truncate">
-            {agentState.activeTool || "Idle"}
-          </div>
-        </div>
-      </div>
-
-      {/* Console Streaming Logs */}
-      <div className="flex-1 flex flex-col min-h-0 bg-black/60">
-        <div className="h-8 px-4 border-b border-zinc-900/60 flex items-center gap-1.5 flex-shrink-0 bg-zinc-950/20">
-          <Terminal size={11} className="text-zinc-500" />
-          <span className="text-3xs font-semibold uppercase tracking-wider text-zinc-500">
-            Terminal Stream
-          </span>
-        </div>
-
-        <div className="flex-1 overflow-y-auto p-4 font-mono text-[10px] leading-relaxed space-y-2 select-text scrollbar-thin">
-          {logs.length === 0 ? (
-            <div className="h-full flex items-center justify-center text-zinc-600 font-medium text-center px-4">
-              Awaiting execution signals. Start a Research or Document build task to run the agent.
-            </div>
-          ) : (
-            logs.map((log, index) => (
-              <div key={index} className="flex items-start gap-1">
-                <span className="text-zinc-600 select-none">[{log.time}]</span>
-                <span
-                  className={
-                    log.type === "success"
-                      ? "text-emerald-400"
-                      : log.type === "warning"
-                      ? "text-amber-400"
-                      : log.type === "error"
-                      ? "text-red-400"
-                      : "text-zinc-300"
-                  }
+        <div className="space-y-3.5 pl-1.5 border-l border-zinc-900 relative">
+          {milestones.map((m) => {
+            const status = getMilestoneStatus(m.key);
+            return (
+              <div key={m.key} className="flex items-start gap-3 relative -left-[11px]">
+                {/* Checkpoint icon */}
+                <div
+                  className={`w-[20px] h-[20px] rounded-full border flex items-center justify-center transition-all bg-zinc-950 flex-shrink-0 ${
+                    status === "completed"
+                      ? "border-emerald-500/50 text-emerald-400"
+                      : status === "running"
+                      ? "border-violet-500 text-violet-400 animate-pulse shadow-sm shadow-violet-500/10"
+                      : status === "cancelled"
+                      ? "border-zinc-800 text-zinc-600"
+                      : "border-zinc-900 text-zinc-700"
+                  }`}
                 >
-                  {log.text}
-                </span>
+                  {status === "completed" ? (
+                    <CheckCircle2 size={12} className="text-emerald-400" />
+                  ) : status === "running" ? (
+                    <Activity size={10} className="animate-spin text-violet-400" />
+                  ) : (
+                    <Circle size={6} className="text-current" />
+                  )}
+                </div>
+
+                <div className="space-y-0.5 pt-0.5">
+                  <p
+                    className={`text-2xs font-semibold leading-none transition-colors ${
+                      status === "completed"
+                        ? "text-zinc-300"
+                        : status === "running"
+                        ? "text-violet-400"
+                        : "text-zinc-600 font-normal"
+                    }`}
+                  >
+                    {m.label}
+                  </p>
+                  {status === "running" && (
+                    <span className="text-[9px] text-zinc-550 font-mono">
+                      Running: {agentState.activeTool}
+                    </span>
+                  )}
+                </div>
               </div>
-            ))
-          )}
-          <div ref={logEndRef} />
+            );
+          })}
         </div>
       </div>
 
-      {/* Memory Database updates panel */}
-      <div className="h-44 border-t border-zinc-900 flex flex-col flex-shrink-0 bg-zinc-950">
-        <div className="h-8 px-4 border-b border-zinc-900/60 flex items-center justify-between bg-zinc-950/20">
+      {/* Collapsible Developer Console logs at bottom */}
+      <div className="border-t border-zinc-900 bg-zinc-950 flex flex-col max-h-[250px] transition-all duration-300">
+        <button
+          onClick={() => setShowDevLogs(!showDevLogs)}
+          className="h-9 px-4 flex items-center justify-between hover:bg-zinc-900/40 text-3xs font-semibold text-zinc-500 uppercase cursor-pointer"
+        >
           <div className="flex items-center gap-1.5">
-            <Database size={11} className="text-zinc-500" />
-            <span className="text-3xs font-semibold uppercase tracking-wider text-zinc-500">
-              Agent Memory Vault
-            </span>
+            <Terminal size={11} className="text-zinc-500" />
+            <span>Developer Diagnostic Console</span>
           </div>
-          <span className="text-4xs font-mono text-violet-400 bg-violet-950/30 border border-violet-900 px-1 rounded">
-            Key-Value
-          </span>
-        </div>
+          {showDevLogs ? <ChevronDown size={12} /> : <ChevronUp size={12} />}
+        </button>
 
-        <div className="flex-1 overflow-y-auto p-3.5 space-y-2 text-2xs scrollbar-thin">
-          {Object.keys(agentState.memory).length === 0 ? (
-            <div className="h-full flex items-center justify-center text-zinc-600 font-medium text-center">
-              No parameters cached in memory.
-            </div>
-          ) : (
-            Object.entries(agentState.memory).map(([key, val]) => (
-              <div
-                key={key}
-                className="flex items-center justify-between py-1 border-b border-zinc-900/50"
-              >
-                <span className="text-zinc-500 font-mono text-[10px]">{key}</span>
-                <span className="text-zinc-300 font-semibold truncate max-w-[150px]" title={val}>
-                  {val}
-                </span>
+        {showDevLogs && (
+          <div className="flex-1 overflow-y-auto p-4 bg-black/60 font-mono text-[9px] leading-relaxed space-y-2 border-t border-zinc-900 select-text h-[200px]">
+            {logs.length === 0 ? (
+              <div className="h-full flex items-center justify-center text-zinc-700 italic">
+                Logs empty. Run package scanner.
               </div>
-            ))
-          )}
-        </div>
-
-        {/* Verification Status Banner */}
-        <div className="h-8 px-4 border-t border-zinc-900 bg-zinc-900/20 flex items-center justify-between text-3xs font-medium text-zinc-500">
-          <div className="flex items-center gap-1">
-            <ShieldCheck size={12} className="text-emerald-400" />
-            <span>Verify Layer Status:</span>
+            ) : (
+              logs.map((log, index) => (
+                <div key={index} className="flex items-start gap-1">
+                  <span className="text-zinc-600 select-none">[{log.time}]</span>
+                  <span
+                    className={
+                      log.type === "success"
+                        ? "text-emerald-400"
+                        : log.type === "warning"
+                        ? "text-amber-400"
+                        : log.type === "error"
+                        ? "text-red-400"
+                        : "text-zinc-400"
+                    }
+                  >
+                    {log.text}
+                  </span>
+                </div>
+              ))
+            )}
+            <div ref={logEndRef} />
           </div>
-          <span
-            className={
-              agentState.verification === "Verified"
-                ? "text-emerald-400 font-semibold"
-                : agentState.verification === "Verifying"
-                ? "text-amber-400 font-semibold animate-pulse"
-                : "text-zinc-500"
-            }
-          >
-            {agentState.verification || "Standing By"}
-          </span>
-        </div>
+        )}
       </div>
     </aside>
   );

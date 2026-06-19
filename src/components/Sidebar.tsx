@@ -16,6 +16,7 @@ import {
   ChevronRight,
   Database,
   Coins,
+  Sparkles,
 } from "lucide-react";
 
 interface SidebarProps {
@@ -35,15 +36,9 @@ export default function Sidebar({
 }: SidebarProps) {
   const menuItems = [
     { id: "dashboard", label: "Dashboard", icon: LayoutDashboard },
-    { id: "research", label: "Research", icon: Search },
-    { id: "proposals", label: "Proposals", icon: FileText },
-    { id: "presentations", label: "Presentations", icon: Presentation },
-    { id: "documents", label: "Documents", icon: Database },
-    { id: "email", label: "Email Campaigns", icon: Mail },
+    { id: "workspace", label: "Business Workspace", icon: Sparkles },
     { id: "connectors", label: "Connectors", icon: Link2, badge: connectedCount },
     { id: "skills", label: "Skills", icon: Cpu },
-    { id: "memory", label: "Memory", icon: Brain },
-    { id: "executions", label: "Executions", icon: Activity },
     { id: "settings", label: "Settings", icon: Settings },
   ];
 

@@ -21,56 +21,48 @@ export interface CompanyIntelligence {
   buyingSignals: string[];
   recommendedPitch: { angle: string; painPoint: string; solution: string };
   decisionMakers: { name: string; role: string; linkedin: string }[];
+  pdfUrl?: string;
+  pptUrl?: string;
 }
 
-export const mockCompanies: Record<string, CompanyIntelligence> = {
-  zoho: {
-    name: "Zoho",
-    website: "zoho.com",
-    industry: "Enterprise SaaS / Business Software",
+export const createDefaultCompany = (name: string): CompanyIntelligence => {
+  const cleanName = name.trim();
+  const domain = `${cleanName.toLowerCase().replace(/\s+/g, "")}.com`;
+  return {
+    name: cleanName,
+    website: domain,
+    industry: "Enterprise / Technology",
     overview: {
-      description: "Zoho Corporation is a leading multinational technology company that specializes in software development, cloud computing, and business tools. Its suite of products handles CRM, recruitment, office tasks, and business operations globally.",
-      hq: "Chennai, India & Austin, TX",
-      size: "15,000+ employees",
-      revenue: "$1.1B ARR (2025 est.)",
+      description: `${cleanName} is being researched by our AI agent network. Please wait...`,
+      hq: "Resolving...",
+      size: "Resolving...",
+      revenue: "Resolving...",
     },
     funding: {
-      total: "Bootstrapped (Profitable)",
-      lastRound: "Not Applicable",
-      investors: ["Sridhar Vembu (Founder-led)"],
+      total: "Resolving...",
+      lastRound: "Resolving...",
+      investors: [],
     },
-    news: [
-      { date: "2026-05-30", title: "Zoho Expands Austin HQ, Targeting US Enterprise Accounts", source: "Austin Business Journal" },
-      { date: "2026-04-12", title: "Zoho Recruit Launches AI Screening Assistant", source: "Zoho Press" },
-    ],
-    leadership: [
-      { name: "Sridhar Vembu", role: "CEO & Co-founder", previous: "Qualcomm" },
-      { name: "Radha Vembu", role: "Product Head", previous: "IIT Madras" },
-    ],
-    techStack: ["Java", "React", "PostgreSQL", "C++", "Apache", "Zoho Creator Engine", "AWS"],
+    news: [],
+    leadership: [],
+    techStack: [],
     hiringSignals: [
-      "Hiring 200+ recruiters and HR ops personnel in Austin and Chennai",
-      "Job postings list 'experience in high-volume developer vetting pipelines'",
-      "Targeting tools to reduce screening latency for remote talent acquisition",
+      "Analyzing active hiring pipelines...",
     ],
-    competitors: [
-      { name: "Workday Recruit", share: "Enterprise Leader", advantage: "Zoho's system has massive pricing advantages, but suffers from legacy developer assessment integrations" },
-      { name: "Greenhouse", share: "Mid-Market Standard", advantage: "TalentIQ provides deeper code-execution analytics and lower latency than traditional APIs" },
-    ],
+    competitors: [],
     buyingSignals: [
-      "Vembu recently stated focus on expanding global developer pools",
-      "Internal HR complaints on manual review backlogs for overseas applicants",
+      "Scanning executive interviews and web trends...",
     ],
     recommendedPitch: {
-      angle: "TalentIQ High-Volume Automated Assessment Integration",
-      painPoint: "HR coordinators face 4-week screening latencies for technical engineering recruits, leading to 35% candidate drop-off.",
-      solution: "Deploy TalentIQ assessment APIs inside Zoho Recruit to verify technical abilities in real time and automatically shortlist candidates.",
+      angle: `Strategic assessment integration for ${cleanName}`,
+      painPoint: "Resolving technical recruitment latencies and bottlenecks...",
+      solution: `Verifying coding capabilities for ${cleanName} technical teams.`,
     },
-    decisionMakers: [
-      { name: "Gopal Vembu", role: "Head of Global HR Ops", linkedin: "linkedin.com/in/gvembu-hr" },
-      { name: "Deepa Krishnan", role: "CHRO", linkedin: "linkedin.com/in/dkrishnan-chro" },
-    ],
-  },
+    decisionMakers: [],
+  };
+};
+
+export const mockCompanies: Record<string, CompanyIntelligence> = {
   stripe: {
     name: "Stripe",
     website: "stripe.com",
@@ -154,19 +146,24 @@ export const mockCompanies: Record<string, CompanyIntelligence> = {
   },
 };
 
-export const defaultProposal = {
-  title: "Enterprise AI Modernization Proposal",
-  company: "Zoho",
-  executiveSummary: "This proposal outlines the integration of TalentIQ's automated screening ledger with Zoho Recruit. By embedding high-fidelity coding sandboxes and automated evaluations, Zoho can compress technical screening times from 4 weeks to 4 hours, mitigating drop-off rates and optimizing recruitment costs.",
-  problemStatement: "Zoho's high-volume hiring flows suffer from manual screening bottlenecks, where recruiters review 500+ developer submittals manually. This triggers interview fatigue and delayed assessments.",
-  opportunity: "Deploying automated assessment adapters provides Zoho HR leaders with instant verification data, ensuring only top-tier talent progresses to the final panel rounds.",
-  solutionOverview: "We propose configuring TalentIQ API adapters directly inside Zoho Recruit profiles to send short, localized screening challenges to applicants instantly.",
-  roi: "Expected ROI: 450% within the first 6 months by trimming recruiter review hours and saving $80k in technical vetting overhead.",
-  implementationPlan: "Phase 1: Configure sandbox API integrations (Weeks 1-2)\nPhase 2: Standardize test templates for developer recruits (Weeks 3-4)\nPhase 3: Rollout live to global tech candidates (Week 5)",
-  pricing: "Annual License fee: $24,000 flat.\nSetup & Configuration Advisory: $8,000.",
-  caseStudies: "1. Vercel Systems: Compresed screening duration by 72% for node roles.\n2. Stripe Billing: Saved 80 recruiter hours monthly.",
-  nextSteps: "1. Authorize API sandbox credentials.\n2. Schedule technical rollout kickoff.",
+export const getProposalForCompany = (name: string, description?: string) => {
+  const comp = name || "Target Company";
+  return {
+    title: `${comp} Enterprise AI Modernization Proposal`,
+    company: comp,
+    executiveSummary: `This proposal outlines the integration of TalentIQ's automated screening ledger with ${comp}'s hiring workflows. By embedding high-fidelity coding sandboxes and automated evaluations, ${comp} can compress technical screening times from 4 weeks to 4 hours, mitigating drop-off rates and optimizing recruitment costs.`,
+    problemStatement: `${comp}'s high-volume hiring flows suffer from manual screening bottlenecks, where recruiters review hundreds of developer submittals manually. This triggers interview fatigue and delayed assessments.`,
+    opportunity: `Deploying automated assessment adapters provides ${comp} HR leaders with instant verification data, ensuring only top-tier talent progresses to the final panel rounds.`,
+    solutionOverview: `We propose configuring TalentIQ API adapters directly inside ${comp}'s recruitment portals to send short, localized screening challenges to applicants instantly.`,
+    roi: "Expected ROI: 450% within the first 6 months by trimming recruiter review hours and saving $80k in technical vetting overhead.",
+    implementationPlan: "Phase 1: Configure sandbox API integrations (Weeks 1-2)\nPhase 2: Standardize test templates for developer recruits (Weeks 3-4)\nPhase 3: Rollout live to global tech candidates (Week 5)",
+    pricing: "Annual License fee: $24,000 flat.\nSetup & Configuration Advisory: $8,000.",
+    caseStudies: "1. Vercel Systems: Compressed screening duration by 72% for node roles.\n2. Stripe Billing: Saved 80 recruiter hours monthly.",
+    nextSteps: "1. Authorize API sandbox credentials.\n2. Schedule technical rollout kickoff.",
+  };
 };
+
+export const defaultProposal = getProposalForCompany("Zoho");
 
 export const defaultSlides = [
   { id: "1", title: "Executive Summary", content: "Optimizing tech sourcing pipelines with automated coding evaluation." },

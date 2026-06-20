@@ -2,19 +2,27 @@
 
 import React, { useState } from "react";
 import { SpotlightCard } from "./SpotlightCard";
-import { defaultProposal } from "@/lib/mockData";
+import { defaultProposal, getProposalForCompany } from "@/lib/mockData";
 import { FileText, Sparkles, AlertTriangle, Lightbulb, FileDown, CheckCircle2 } from "lucide-react";
 
 interface ProposalBuilderProps {
   onGenerateProposal: (proposalTitle: string) => void;
   isRunning: boolean;
+  companyData: any;
 }
 
 export default function ProposalBuilder({
   onGenerateProposal,
   isRunning,
+  companyData,
 }: ProposalBuilderProps) {
   const [proposal, setProposal] = useState(defaultProposal);
+
+  React.useEffect(() => {
+    if (companyData && companyData.name) {
+      setProposal(getProposalForCompany(companyData.name, companyData.overview?.description));
+    }
+  }, [companyData]);
 
   const aiSuggestions: Record<string, { tips: string[]; risks: string[]; gains: string[] }> = {
     executiveSummary: {

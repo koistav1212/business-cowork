@@ -7,6 +7,7 @@ import ProposalBuilder from "./ProposalBuilder";
 import PresentationBuilder from "./PresentationBuilder";
 import EmailCampaign from "./EmailCampaign";
 import { CompanyIntelligence, getSlidesForCount, getEmailForGoalAndStyle } from "@/lib/mockData";
+import { runResearch } from "@/lib/api";
 import {
   FileDown,
   Building2,
@@ -30,6 +31,7 @@ interface BusinessWorkspaceProps {
   slidesCount: number;
   writingStyle: string;
   sourcingGoal: string;
+  onUpdateCompanyData?: (data: CompanyIntelligence) => void;
 }
 
 export default function BusinessWorkspace({
@@ -39,6 +41,7 @@ export default function BusinessWorkspace({
   slidesCount,
   writingStyle,
   sourcingGoal,
+  onUpdateCompanyData,
 }: BusinessWorkspaceProps) {
   const [activeSubTab, setActiveSubTab] = useState<"dossier" | "slides" | "proposal" | "emails">("dossier");
 
@@ -197,7 +200,23 @@ export default function BusinessWorkspace({
       {/* Sub-Tab content viewport */}
       <div className="bg-[#040406]/20 border border-zinc-900/60 rounded-xl overflow-hidden min-h-[500px]">
         {activeSubTab === "dossier" && (
-          <ResearchTab companyData={companyData} onGenerate={() => {}} isRunning={isRunning} hideForm={true} />
+          <ResearchTab
+            companyData={companyData}
+            onGenerate={(formInputs) => {
+              onRunAction("research", async () => {
+                try {
+                  const result = await runResearch(formInputs.name);
+                  if (onUpdateCompanyData) {
+                    onUpdateCompanyData(result);
+                  }
+                } catch (err) {
+                  console.error("Failed running research on Dossier tab:", err);
+                }
+              });
+            }}
+            isRunning={isRunning}
+            hideForm={true}
+          />
         )}
 
         {activeSubTab === "slides" && (
@@ -293,7 +312,7 @@ export default function BusinessWorkspace({
         )}
 
         {activeSubTab === "proposal" && (
-          <ProposalBuilder onGenerateProposal={() => {}} isRunning={isRunning} />
+          <ProposalBuilder onGenerateProposal={() => {}} isRunning={isRunning} companyData={companyData} />
         )}
 
         {activeSubTab === "emails" && (

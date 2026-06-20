@@ -9,11 +9,13 @@ import BusinessWorkspace from "@/components/BusinessWorkspace";
 import ConnectorsPage from "@/components/ConnectorsPage";
 import SkillsPage from "@/components/SkillsPage";
 import RightActivityPanel from "@/components/RightActivityPanel";
+import { runResearch } from "@/lib/api";
 import {
   mockCompanies,
   mockConnectors,
   agentLogSequence,
   CompanyIntelligence,
+  createDefaultCompany,
 } from "@/lib/mockData";
 import {
   Sparkles,
@@ -162,18 +164,18 @@ export default function Home() {
     setSourcingGoal(form.goal);
 
     const compKey = form.company.toLowerCase();
-    const resolvedCompany = mockCompanies[compKey] || {
-      ...mockCompanies.zoho,
-      name: form.company,
-      website: `${compKey}.com`,
-      industry: "Enterprise Tech",
-    };
+    const resolvedCompany = mockCompanies[compKey] || createDefaultCompany(form.company);
 
     setCompanyData(resolvedCompany);
     setActiveTab("workspace");
 
-    runAgentTask("research", () => {
-      // Done simulating
+    runAgentTask("research", async () => {
+      try {
+        const result = await runResearch(form.company, form.goal);
+        setCompanyData(result);
+      } catch (err) {
+        console.error("Failed to run real research, falling back to mock:", err);
+      }
     });
   };
 
@@ -261,6 +263,7 @@ export default function Home() {
               slidesCount={slidesCount}
               writingStyle={writingStyle}
               sourcingGoal={sourcingGoal}
+              onUpdateCompanyData={setCompanyData}
             />
           )}
 
